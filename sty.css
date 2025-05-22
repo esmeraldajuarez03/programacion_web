@@ -833,18 +833,24 @@ dialog li {
     max-width: 90%;
 }
 
-h1 {
-    text-align: center;
-    font-size: 1.8rem;
-    margin-bottom: 15px;
-    color: #6a4c93;
+body {
+  font-family: 'Fredoka', sans-serif;
+  background: #ffeafc;
+  color: #333;
+  padding: 20px;
 }
 
-h2 {
-    text-align: center;
-    font-size: 1.4rem;
-    margin: 20px 0 10px;
-    color: #6a4c93;
+.container {
+  max-width: 600px;
+  margin: auto;
+  background: #fff0f9;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 0 15px rgba(255, 182, 193, 0.4);
+}
+
+h1, h2 {
+  text-align: center;
 }
 
 .comment-form {
@@ -853,45 +859,37 @@ h2 {
   gap: 10px;
 }
 
-.comment-form input,
-.comment-form textarea {
-  background-color: #f3e5f5;
-  border: 2px solid #e1bee7;
-  border-radius: 10px;
+input, textarea {
   padding: 10px;
+  border: 2px solid #ffc2e2;
+  border-radius: 10px;
   font-size: 16px;
-  color: #6a1b9a;
 }
 
-.comment-form button {
-  background-color: #8e24aa;
-  color: #fff;
+button {
+  background: #ff8ac9;
+  color: white;
   border: none;
   padding: 10px;
   border-radius: 10px;
+  font-size: 16px;
   cursor: pointer;
   transition: background 0.3s;
 }
 
-.comment-form button:hover {
-  background-color: #6a1b9a;
+button:hover {
+  background: #ff5daf;
 }
 
-/* Estilos de los comentarios */
-.comment-card {
-  background-color: #f3e5f5;
-  padding: 10px 15px;
+.comentario {
+  background: #fff;
   margin-top: 10px;
-  border: 2px solid #e1bee7;
+  padding: 10px;
   border-radius: 10px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid #ffc2e2;
 }
 
-.comment-card p {
-  margin: 5px 0;
-  color: #6a1b9a;
-  font-size: 15px;
-}
+
 
 
 

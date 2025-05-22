@@ -35,55 +35,38 @@ function mostrarUnidad(unidad) {
     }
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    const submitBtn = document.getElementById('submitBtn');
-    const commentsList = document.getElementById('commentsList');
+    // Cargar comentarios al iniciar
+fetch('/comentarios')
+  .then(res => res.json())
+  .then(data => {
+    data.forEach(c => mostrarComentario(c.nombre, c.mensaje));
+  });
 
-    // Enviar comentario
-    submitBtn.addEventListener('click', async () => {
-        const name = document.getElementById('name').value.trim();
-        const message = document.getElementById('message').value.trim();
+// Evento al enviar
+document.getElementById('submitBtn').addEventListener('click', () => {
+  const nombre = document.getElementById('name').value.trim();
+  const mensaje = document.getElementById('message').value.trim();
 
-        if (!name || !message) {
-            alert('🌸 Completa ambos campos');
-            return;
-        }
+  if (!nombre || !mensaje) return;
 
-        try {
-            const response = await fetch('http://localhost:3000/api/comentarios', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ nombre: name, mensaje: message })
-            });
-            
-            if (response.ok) {
-                loadComments();
-                document.getElementById('name').value = '';
-                document.getElementById('message').value = '';
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    });
+  const comentario = { nombre, mensaje };
 
-    // Cargar comentarios
-    async function loadComments() {
-        try {
-            const response = await fetch('http://localhost:3000/api/comentarios');
-            const comments = await response.json();
-            
-            commentsList.innerHTML = comments.map(comment => `
-                <div class="comment-card">
-                    <p><strong>${comment.nombre}</strong> - ${new Date(comment.fecha).toLocaleString()}</p>
-                    <p>${comment.mensaje}</p>
-                </div>
-            `).join('');
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
-
-    // Cargar comentarios al inicio
-    loadComments();
+  fetch('/comentarios', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(comentario)
+  })
+  .then(res => res.json())
+  .then(() => {
+    mostrarComentario(nombre, mensaje);
+    document.getElementById('name').value = '';
+    document.getElementById('message').value = '';
+  });
 });
 
+function mostrarComentario(nombre, mensaje) {
+  const div = document.createElement('div');
+  div.classList.add('comentario');
+  div.innerHTML = `<strong>${nombre}:</strong> ${mensaje}`;
+  document.getElementById('commentsList').appendChild(div);
+}

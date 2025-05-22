@@ -1,0 +1,37 @@
+{
+	"folders": [
+		{
+			"path": "../../Users/kaode/OneDrive/Escritorio/programas"
+		},
+		{
+			"path": "../../Users/kaode/OneDrive/Escritorio/PROGRAMASJAVA"
+		},
+		{
+			"path": "../../Users/kaode/OneDrive/Escritorio/HTML Y CSS"
+		},
+		{
+			"path": "../../Users/kaode/Documents/proyectoClase"
+		},
+		{
+			"path": "../../Users/kaode/OneDrive/Escritorio/PROGRAMASPYTHON"
+		},
+		{
+			"path": "../../Users/kaode/OneDrive/Escritorio/Script"
+		},
+		{
+			"path": "../../Users/kaode/OneDrive/Escritorio/programacionJavaPython"
+		},
+		{
+			"path": "../../Users/kaode/OneDrive/Escritorio/programacion web"
+		}
+	],
+	"settings": {
+		"java.debug.settings.onBuildFailureProceed": true,
+		"liveServer.settings.multiRootWorkspaceName": "programacion web"
+	},
+	"extensions": {
+		"recommendations": [
+			"ttoowa.in-your-face-incredible"
+		]
+	}
+}
