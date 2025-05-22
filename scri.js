@@ -35,23 +35,39 @@ function mostrarUnidad(unidad) {
     }
 });
 
-// Cargar comentarios al iniciar
-async function loadComments() {
-    const response = await fetch("/api/comments");
-    const comments = await response.json();
+fetch('/comentarios')
+  .then(res => res.json())
+  .then(data => {
+    data.forEach(c => mostrarComentario(c.nombre, c.mensaje));
+  });
 
-    const commentsList = document.getElementById("commentsList");
-    commentsList.innerHTML = "";
+// Evento al enviar
+document.getElementById('submitBtn').addEventListener('click', () => {
+  const nombre = document.getElementById('name').value.trim();
+  const mensaje = document.getElementById('message').value.trim();
 
-    comments.forEach(comment => {
-        const commentElement = document.createElement("div");
-        commentElement.classList.add("comment");
-        commentElement.innerHTML = `<strong>${comment.name}:</strong> ${comment.message}`;
-        commentsList.appendChild(commentElement);
-    });
+  if (!nombre || !mensaje) return;
+
+  const comentario = { nombre, mensaje };
+
+  fetch('/comentarios', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(comentario)
+  })
+  .then(res => res.json())
+  .then(() => {
+    mostrarComentario(nombre, mensaje);
+    document.getElementById('name').value = '';
+    document.getElementById('message').value = '';
+  });
+});
+
+function mostrarComentario(nombre, mensaje) {
+  const div = document.createElement('div');
+  div.classList.add('comentario');
+  div.innerHTML = `<strong>${nombre}:</strong> ${mensaje}`;
+  document.getElementById('commentsList').appendChild(div);
 }
-
-// Llamar al cargar la página
-loadComments();
 
 
