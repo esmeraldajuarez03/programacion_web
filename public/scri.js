@@ -16,57 +16,64 @@ function mostrarUnidad(unidad) {
     if (tarjetaSeleccionada) {
       tarjetaSeleccionada.classList.add("show");
     }
-  }document.getElementById("submitBtn").addEventListener("click", async () => {
-    const name = document.getElementById("name").value;
-    const message = document.getElementById("message").value;
-
-    if (name && message) {
-        await fetch("/api/comments", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ name, message })
-        });
-
-        loadComments();
-        document.getElementById("name").value = "";
-        document.getElementById("message").value = "";
+  }
+  function displayComments(comments) {
+        commentsList.innerHTML = comments.map(comment => `
+            <div class="comment-card">
+                <p><strong>${comment.nombre}</strong></p>
+                <p>${comment.mensaje}</p>
+                <small>${new Date(comment.fecha).toLocaleString()}</small>
+            </div>
+        `).join('');
     }
-});
 
     // Cargar comentarios al iniciar
-fetch('/comentarios')
-  .then(res => res.json())
-  .then(data => {
-    data.forEach(c => mostrarComentario(c.nombre, c.mensaje));
-  });
+    async function loadComments() {
+        try {
+            const response = await fetch('http://localhost:3000/api/comentarios');
+            const comments = await response.json();
+            displayComments(comments);
+        } catch (error) {
+            console.error('Error cargando comentarios:', error);
+            commentsList.innerHTML = '<p>Error al cargar comentarios</p>';
+        }
+    }
 
-// Evento al enviar
-document.getElementById('submitBtn').addEventListener('click', () => {
-  const nombre = document.getElementById('name').value.trim();
-  const mensaje = document.getElementById('message').value.trim();
+    // Enviar nuevo comentario
+    submitBtn.addEventListener('click', async function() {
+        const name = document.getElementById('name').value.trim();
+        const message = document.getElementById('message').value.trim();
+        
+        if (!name || !message) {
+            alert('Por favor completa ambos campos');
+            return;
+        }
 
-  if (!nombre || !mensaje) return;
+        try {
+            const response = await fetch('http://localhost:3000/api/comentarios', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    nombre: name, 
+                    mensaje: message 
+                })
+            });
+            
+            if (!response.ok) throw new Error('Error al enviar');
+            
+            // Limpiar campos y recargar comentarios
+            document.getElementById('name').value = '';
+            document.getElementById('message').value = '';
+            loadComments();
+            
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error al enviar comentario');
+        }
+    });
 
-  const comentario = { nombre, mensaje };
+    // Cargar comentarios iniciales
+    loadComments();
 
-  fetch('/comentarios', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(comentario)
-  })
-  .then(res => res.json())
-  .then(() => {
-    mostrarComentario(nombre, mensaje);
-    document.getElementById('name').value = '';
-    document.getElementById('message').value = '';
-  });
-});
-
-function mostrarComentario(nombre, mensaje) {
-  const div = document.createElement('div');
-  div.classList.add('comentario');
-  div.innerHTML = `<strong>${nombre}:</strong> ${mensaje}`;
-  document.getElementById('commentsList').appendChild(div);
-}
+        
+      

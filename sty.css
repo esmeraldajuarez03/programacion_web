@@ -889,6 +889,15 @@ button:hover {
   border: 1px solid #ffc2e2;
 }
 
+.comentario {
+    background-color: #fff0f5;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 0 5px #ffd6e7;
+}
+
+
 
 
 
