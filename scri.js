@@ -17,39 +17,67 @@ function mostrarUnidad(unidad) {
         tarjetaSeleccionada.classList.add("show");
     }
 }
-    const API_URL = 'https://programacion-web-backend.onrender.com/api/comentarios';
+   
 
-async function loadComments() {
-    try {
-    const response = await fetch(API_URL); // GET
-    if (!response.ok) throw new Error('Error al cargar comentarios');
-    const comments = await response.json();
-    renderComments(comments);
-    } catch (error) {
-    console.error('Error:', error);
-    document.getElementById('commentsList').innerHTML = 
-    '<p>No se pudieron cargar los comentarios. ¿El servidor está corriendo?</p>';
-}
-}
+    // Manejar comentarios generales
+    const generalCommentForm = document.getElementById("generalCommentForm");
+    const generalCommentText = document.getElementById("generalCommentText");
+    const generalCommentsList = document.getElementById("generalCommentsList");
 
-// Ejemplo de POST corregido:
-document.getElementById('submitBtn').addEventListener('click', async () => {
-    const name = document.getElementById('name').value.trim();
-    const message = document.getElementById('message').value.trim();
+    // Guardar comentarios generales en localStorage
+    const saveGeneralComments = (comments) => {
+        localStorage.setItem("generalComments", JSON.stringify(comments));
+    };
 
-    try {
-    const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre: name, mensaje: message }),
+    // Obtener comentarios generales de localStorage
+    const getGeneralComments = () => {
+        return JSON.parse(localStorage.getItem("generalComments")) || [];
+    };
+
+    // Mostrar comentarios generales
+    const displayGeneralComments = () => {
+        generalCommentsList.innerHTML = ""; // Limpiar comentarios previos
+        const comments = getGeneralComments();
+        comments.forEach((comment, index) => {
+            const li = document.createElement("li");
+            li.textContent = comment;
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Eliminar";
+            deleteButton.classList.add("delete-comment-button");
+            deleteButton.addEventListener("click", () => {
+                comments.splice(index, 1);
+                saveGeneralComments(comments);
+                displayGeneralComments();
+            });
+            li.appendChild(deleteButton);
+            generalCommentsList.appendChild(li);
+        });
+    };
+
+    // Manejar envío de comentarios generales
+    generalCommentForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const comment = generalCommentText.value.trim();
+        if (comment) {
+            const comments = getGeneralComments();
+            comments.push(comment);
+            saveGeneralComments(comments);
+            generalCommentText.value = ""; // Limpiar campo de texto
+            displayGeneralComments();
+        } else {
+            alert("El comentario no puede estar vacío.");
+        }
     });
-    if (!response.ok) throw new Error('Error al enviar');
-    loadComments(); // Recarga los comentarios
-    } catch (error) {
-    console.error('Error:', error);
-    alert('Error al enviar. Verifica la consola para más detalles.');
-}
-});
 
-        
-      
+    // Mostrar comentarios generales al cargar la página
+    displayGeneralComments();
+
+    const logoutBtnModal = document.getElementById("logoutBtnModal");
+    if (logoutBtnModal) {
+        logoutBtnModal.addEventListener("click", () => {
+            removeUser();
+            alert("Sesión cerrada.");
+            userModal.style.display = "none";
+            updateUIForUser();
+        });
+    }
