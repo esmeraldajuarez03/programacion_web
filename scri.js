@@ -18,64 +18,95 @@ function mostrarUnidad(unidad) {
     }
 }
    
-
-const API_URL = 'http://localhost:3000/api/comentarios'; // Cambia esto por tu URL de producción
-
 document.addEventListener('DOMContentLoaded', () => {
-  loadComments();
+    // Elementos del DOM
+    const submitBtn = document.getElementById('submitBtn');
+    const nameInput = document.getElementById('name');
+    const messageInput = document.getElementById('message');
+    const commentsList = document.getElementById('commentsList');
+    const API_URL = 'http://localhost:3000/api/comentarios'; // Cambiar por tu URL en producción
 
-  document.getElementById('submitBtn').addEventListener('click', async () => {
-    const name = document.getElementById('name').value.trim();
-    const message = document.getElementById('message').value.trim();
-
-    if (!name || !message) {
-      alert('Por favor completa ambos campos');
-      return;
+    // Verificación crítica de elementos
+    if (!submitBtn || !nameInput || !messageInput || !commentsList) {
+        showError('Error: Elementos HTML no encontrados');
+        return;
     }
 
-    try {
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre: name, mensaje: message })
-      });
+    // Cargar comentarios al iniciar
+    loadComments();
 
-      if (!response.ok) throw new Error('Error al enviar');
-      
-      document.getElementById('name').value = '';
-      document.getElementById('message').value = '';
-      loadComments();
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Error al enviar. Verifica la consola para más detalles.');
+    // Evento para enviar comentarios
+    submitBtn.addEventListener('click', handleSubmit);
+
+    // Función para manejar el envío
+    async function handleSubmit() {
+        const name = nameInput.value.trim();
+        const message = messageInput.value.trim();
+
+        if (!name || !message) {
+            showError('Por favor completa ambos campos', false);
+            return;
+        }
+
+        try {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nombre: name, mensaje: message })
+            });
+
+            if (!response.ok) throw new Error('Error en la respuesta del servidor');
+
+            // Limpiar campos y recargar comentarios
+            nameInput.value = '';
+            messageInput.value = '';
+            await loadComments();
+
+        } catch (error) {
+            showError(`Error al enviar: ${error.message}`);
+            console.error('Detalles del error:', error);
+        }
     }
-  });
 
-  async function loadComments() {
-    try {
-      const response = await fetch(API_URL);
-      if (!response.ok) throw new Error('Error al cargar');
-      
-      const comments = await response.json();
-      renderComments(comments);
-    } catch (error) {
-      console.error('Error:', error);
-      document.getElementById('commentsList').innerHTML = `
-        <p class="error">⚠️ Error al cargar comentarios. ¿El servidor está corriendo?</p>
-      `;
+    // Función para cargar comentarios
+    async function loadComments() {
+        try {
+            const response = await fetch(API_URL);
+            if (!response.ok) throw new Error('Error al cargar comentarios');
+
+            const comments = await response.json();
+            renderComments(comments);
+
+        } catch (error) {
+            showError(`Error al cargar: ${error.message}`);
+        }
     }
-  }
 
-  function renderComments(comments) {
-    const container = document.getElementById('commentsList');
-    container.innerHTML = comments.length === 0 
-      ? '<p>No hay comentarios aún</p>'
-      : comments.map(comment => `
-          <div class="comentario">
-            <p><strong>${comment.nombre}</strong></p>
-            <p>${comment.mensaje}</p>
-            <small>${new Date(comment.fecha).toLocaleString()}</small>
-          </div>
-        `).join('');
-  }
+    // Función para mostrar comentarios
+    function renderComments(comments) {
+        commentsList.innerHTML = comments.length === 0
+            ? '<p>No hay comentarios aún. ¡Sé el primero!</p>'
+            : comments.map(comment => `
+                <div class="comentario">
+                    <p><strong>${comment.nombre}</strong></p>
+                    <p>${comment.mensaje}</p>
+                    <small>${new Date(comment.fecha).toLocaleString()}</small>
+                </div>
+            `).join('');
+    }
+
+    // Función para mostrar errores
+    function showError(message, isSevere = true) {
+        console.error(message);
+        if (isSevere) {
+            commentsList.innerHTML = `
+                <div class="error">
+                    <p>⚠️ ${message}</p>
+                    <p>Recarga la página o intenta más tarde.</p>
+                </div>
+            `;
+        } else {
+            alert(message);
+        }
+    }
 });
