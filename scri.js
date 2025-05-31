@@ -17,31 +17,42 @@ function mostrarUnidad(unidad) {
         tarjetaSeleccionada.classList.add("show");
     }
 }
-   
-const REPO_OWNER = 'esmeraldajuarez03';
-const REPO_NAME = 'programacion_web';
-const API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/issues`;
-const TOKEN = window.CONFIG?.GITHUB_TOKEN || '';
 
-if (!TOKEN) {
-  console.error('❌ No se encontró el token de GitHub');
-  document.getElementById('commentsList').innerHTML = `
-    <p class="error">Error de configuración. Contacta al administrador.</p>
-  `;
-}
+const backendURL = 'https://programacion-web-rgyh.onrender.com'; // URL de tu backend en Render
 
-async function postComment(name, message) {
-    const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-            'Authorization': `token ${TOKEN}`,
-            'Accept': 'application/vnd.github.v3+json'
-        },
-        body: JSON.stringify({
-            title: `Comentario de ${name}`,
-            body: message,
-            labels: ['comentarios']
-        })
+const formulario = document.getElementById('formulario');
+const lista = document.getElementById('lista-comentarios');
+
+formulario.addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  const autor = document.getElementById('autor').value;
+  const texto = document.getElementById('texto').value;
+
+  fetch(`${backendURL}/comentarios`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ autor, texto })
+  })
+  .then(res => res.json())
+  .then(() => {
+    formulario.reset();
+    obtenerComentarios(); // refresca la lista
+  });
+});
+
+function obtenerComentarios() {
+  fetch(`${backendURL}/comentarios`)
+    .then(res => res.json())
+    .then(comentarios => {
+      lista.innerHTML = '';
+      comentarios.forEach(comentario => {
+        const li = document.createElement('li');
+        li.textContent = `${comentario.autor}: ${comentario.texto}`;
+        lista.appendChild(li);
+      });
     });
-    return response.json();
 }
+
+// Cargar comentarios al entrar
+obtenerComentarios();
