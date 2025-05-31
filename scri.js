@@ -17,7 +17,7 @@ function mostrarUnidad(unidad) {
         tarjetaSeleccionada.classList.add("show");
     }
 }
-   const API_URL = 'http://localhost:3000/api/comentarios'; // ← URL local
+    const API_URL = 'https://programacion-web-backend.onrender.com/api/comentarios';
 
 async function loadComments() {
     try {
