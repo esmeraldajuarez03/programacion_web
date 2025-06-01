@@ -18,25 +18,47 @@ function mostrarUnidad(unidad) {
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const nameInput = document.getElementById("name");
-  const messageInput = document.getElementById("message");
-  const submitBtn = document.getElementById("submitBtn");
-  const commentsList = document.getElementById("commentsList");
 
-  submitBtn.addEventListener("click", () => {
-    const name = nameInput.value.trim();
-    const message = messageInput.value.trim();
+document.addEventListener('DOMContentLoaded', () => {
+  const nameInput = document.getElementById('name');
+  const messageInput = document.getElementById('message');
+  const submitBtn = document.getElementById('submitBtn');
+  const commentsList = document.getElementById('commentsList');
 
-    if (name && message) {
-      const commentDiv = document.createElement("div");
-      commentDiv.classList.add("comentario");
-      commentDiv.innerHTML = `<strong>${name}</strong>: ${message}`;
-      commentsList.appendChild(commentDiv);
+  // Cargar comentarios almacenados en localStorage
+  const comentarios = JSON.parse(localStorage.getItem('comentarios')) || [];
+  comentarios.forEach(comentario => {
+    mostrarComentario(comentario);
+  });
 
-      // Limpiar campos
-      nameInput.value = "";
-      messageInput.value = "";
+  submitBtn.addEventListener('click', () => {
+    const nombre = nameInput.value.trim();
+    const mensaje = messageInput.value.trim();
+
+    if (nombre && mensaje) {
+      const nuevoComentario = { nombre, mensaje, fecha: new Date().toLocaleString() };
+
+      comentarios.push(nuevoComentario);
+      localStorage.setItem('comentarios', JSON.stringify(comentarios));
+      mostrarComentario(nuevoComentario);
+
+      // Limpiar formulario
+      nameInput.value = '';
+      messageInput.value = '';
+    } else {
+      alert('Por favor completa todos los campos. ✨');
     }
   });
+
+  function mostrarComentario({ nombre, mensaje, fecha }) {
+    const div = document.createElement('div');
+    div.classList.add('comentario');
+    div.innerHTML = `
+      <p><strong>${nombre}</strong> escribió:</p>
+      <p>${mensaje}</p>
+      <small>${fecha}</small>
+      <hr>
+    `;
+    commentsList.appendChild(div);
+  }
 });
