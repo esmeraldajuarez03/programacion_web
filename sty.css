@@ -894,5 +894,67 @@ body {
   margin-top: 1rem;
 }
 
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  h1, h2, h3 {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .container,
+  #comentarios,
+  .tarjeta-sobre-mi,
+  .comment-form,
+  .tarjetas_unid,
+  .galeria,
+  .recomendaciones,
+  .perfil-idol,
+  footer {
+    width: 100% !important;
+    max-width: 100%;
+    padding: 1rem;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  .comment-form input,
+  .comment-form textarea,
+  .comment-form button {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .imagen-sobre-mi,
+  .tarjeta-idol img,
+  .card img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+  }
+
+  nav.main-menu ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  nav.main-menu li {
+    margin: 10px 0;
+  }
+
+  .card, .tarjeta-idol, .galeria img {
+    flex: 1 1 100%;
+    margin: 10px 0;
+  }
+
+  .entrada button,
+  .card button {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
+}
 
 
