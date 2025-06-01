@@ -18,41 +18,25 @@ function mostrarUnidad(unidad) {
     }
 }
 
-const backendURL = 'https://programacion-web-rgyh.onrender.com'; // URL de tu backend en Render
+document.addEventListener("DOMContentLoaded", () => {
+  const nameInput = document.getElementById("name");
+  const messageInput = document.getElementById("message");
+  const submitBtn = document.getElementById("submitBtn");
+  const commentsList = document.getElementById("commentsList");
 
-const formulario = document.getElementById('formulario');
-const lista = document.getElementById('lista-comentarios');
+  submitBtn.addEventListener("click", () => {
+    const name = nameInput.value.trim();
+    const message = messageInput.value.trim();
 
-formulario.addEventListener('submit', function (e) {
-  e.preventDefault();
+    if (name && message) {
+      const commentDiv = document.createElement("div");
+      commentDiv.classList.add("comentario");
+      commentDiv.innerHTML = `<strong>${name}</strong>: ${message}`;
+      commentsList.appendChild(commentDiv);
 
-  const autor = document.getElementById('autor').value;
-  const texto = document.getElementById('texto').value;
-
-  fetch(`${backendURL}/comentarios`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ autor, texto })
-  })
-  .then(res => res.json())
-  .then(() => {
-    formulario.reset();
-    obtenerComentarios(); // refresca la lista
+      // Limpiar campos
+      nameInput.value = "";
+      messageInput.value = "";
+    }
   });
 });
-
-function obtenerComentarios() {
-  fetch(`${backendURL}/comentarios`)
-    .then(res => res.json())
-    .then(comentarios => {
-      lista.innerHTML = '';
-      comentarios.forEach(comentario => {
-        const li = document.createElement('li');
-        li.textContent = `${comentario.autor}: ${comentario.texto}`;
-        lista.appendChild(li);
-      });
-    });
-}
-
-// Cargar comentarios al entrar
-obtenerComentarios();
