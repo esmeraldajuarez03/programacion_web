@@ -60,4 +60,4 @@ function mostrarUnidad(unidad) {
     `;
     commentsList.appendChild(div);
   }
-});
+
