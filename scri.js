@@ -37,30 +37,22 @@ function mostrarUnidad(unidad) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const nameInput = document.getElementById('name');
-  const messageInput = document.getElementById('message');
-  const submitBtn = document.getElementById('submitBtn');
-  const commentsList = document.getElementById('commentsList');
+const nameInput = document.getElementById('name');
+const messageInput = document.getElementById('message');
+const submitBtn = document.getElementById('submitBtn');
+const commentsList = document.getElementById('commentsList');
 
-  let comentarios = JSON.parse(localStorage.getItem('comentarios')) || [];
+const comentarios = JSON.parse(localStorage.getItem('comentarios')) || [];
+comentarios.forEach(comentario => {
+mostrarComentario(comentario);
+});
 
-  comentarios.forEach(com => mostrarComentario(com));
-
-  submitBtn.addEventListener('click', () => {
+submitBtn.addEventListener('click', () => {
     const nombre = nameInput.value.trim();
     const mensaje = messageInput.value.trim();
 
-    if (!nombre || !mensaje) {
-      alert("Completa ambos campos.");
-      return;
-    }
-
-    const nuevoComentario = {
-      nombre,
-      mensaje,
-      fecha: new Date().toLocaleString()
-    };
+if (nombre && mensaje) {
+    const nuevoComentario = { nombre, mensaje, fecha: new Date().toLocaleString() };
 
     comentarios.push(nuevoComentario);
     localStorage.setItem('comentarios', JSON.stringify(comentarios));
@@ -68,17 +60,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     nameInput.value = '';
     messageInput.value = '';
-  });
+    } else {
+        alert('Por favor completa todos los campos. ✨');
+    }
+    });
 
-  function mostrarComentario({ nombre, mensaje, fecha }) {
-    const div = document.createElement('div');
+function mostrarComentario({ nombre, mensaje, fecha }) {
+const div = document.createElement('div');
     div.classList.add('comentario');
     div.innerHTML = `
-      <p><strong>${nombre}</strong> dijo:</p>
-      <p>${mensaje}</p>
-      <small>${fecha}</small>
-      <hr>
-    `;
-    commentsList.appendChild(div);
-  }
-});
+    <p><strong>${nombre}</strong> escribió:</p>
+    <p>${mensaje}</p>
+    <small>${fecha}</small>
+    <hr>
+  `;
+  commentsList.appendChild(div);
+}
+
