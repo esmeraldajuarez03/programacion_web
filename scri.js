@@ -18,46 +18,46 @@ function mostrarUnidad(unidad) {
     }
 }
 
-
-  const nameInput = document.getElementById('name');
-  const messageInput = document.getElementById('message');
-  const submitBtn = document.getElementById('submitBtn');
-  const commentsList = document.getElementById('commentsList');
+document.addEventListener('DOMContentLoaded', () =>{
+    const nameInput = document.getElementById('name');
+    const messageInput = document.getElementById('message');
+    const submitBtn = document.getElementById('submitBtn');
+    const commentsList = document.getElementById('commentsList');
 
   // Cargar comentarios almacenados en localStorage
-  const comentarios = JSON.parse(localStorage.getItem('comentarios')) || [];
-  comentarios.forEach(comentario => {
-    mostrarComentario(comentario);
-  });
+    const comentarios = JSON.parse(localStorage.getItem('comentarios')) || [];
+        comentarios.forEach(comentario => {
+        mostrarComentario(comentario);
+    });
 
-  submitBtn.addEventListener('click', () => {
+submitBtn.addEventListener('click', () => {
     const nombre = nameInput.value.trim();
     const mensaje = messageInput.value.trim();
 
     if (nombre && mensaje) {
-      const nuevoComentario = { nombre, mensaje, fecha: new Date().toLocaleString() };
+        const nuevoComentario = { nombre, mensaje, fecha: new Date().toLocaleString() };
 
-      comentarios.push(nuevoComentario);
-      localStorage.setItem('comentarios', JSON.stringify(comentarios));
-      mostrarComentario(nuevoComentario);
+    comentarios.push(nuevoComentario);
+    localStorage.setItem('comentarios', JSON.stringify(comentarios));
+    mostrarComentario(nuevoComentario);
 
       // Limpiar formulario
-      nameInput.value = '';
-      messageInput.value = '';
+    nameInput.value = '';
+    messageInput.value = '';
     } else {
-      alert('Por favor completa todos los campos. ✨');
+        alert('Por favor completa todos los campos. ✨');
     }
-  });
+});
 
-  function mostrarComentario({ nombre, mensaje, fecha }) {
+function mostrarComentario({ nombre, mensaje, fecha }) {
     const div = document.createElement('div');
     div.classList.add('comentario');
     div.innerHTML = `
-      <p><strong>${nombre}</strong> escribió:</p>
-      <p>${mensaje}</p>
-      <small>${fecha}</small>
-      <hr>
+        <p><strong>${nombre}</strong> escribió:</p>
+        <p>${mensaje}</p>
+        <small>${fecha}</small>
+        <hr>
     `;
     commentsList.appendChild(div);
-  }
+}});
 
