@@ -1,12 +1,16 @@
 {
-  "name": "comentarios",
+  "name": "pagina_web_comentarios",
   "version": "1.0.0",
+  "description": "Página web con comentarios usando Node.js y Express",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
   }
 }
