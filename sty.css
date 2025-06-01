@@ -853,53 +853,45 @@ body {
 
 /* Estilo para la sección de comentarios */
 #comentarios {
+  background-color: #fff0f5;
   padding: 2rem;
-  background-color: #ffeef8;
-  border-radius: 20px;
+  border-radius: 16px;
   margin: 2rem auto;
-  max-width: 700px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 600px;
   font-family: 'Fredoka', sans-serif;
-}
-
-.comment-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 2rem;
 }
 
 .comment-form input,
 .comment-form textarea {
-  padding: 1rem;
-  border-radius: 15px;
-  border: 2px solid #ffc4dd;
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 2px solid #f9c3d1;
+  border-radius: 12px;
   font-size: 1rem;
-  resize: none;
 }
 
 .comment-form button {
-  padding: 0.8rem 1.5rem;
-  background-color: #ff90b3;
-  border: none;
-  border-radius: 15px;
+  background-color: #ffadd6;
   color: white;
-  font-weight: bold;
-  font-size: 1rem;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 12px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-weight: bold;
+  transition: background-color 0.3s;
 }
 
 .comment-form button:hover {
-  background-color: #ff6fa0;
+  background-color: #f28ab2;
 }
 
-#commentsList .comentario {
-  background-color: #fff5fb;
-  border-left: 4px solid #ff90b3;
-  padding: 0.8rem;
-  margin-bottom: 1rem;
-  border-radius: 10px;
+.comentario {
+  background-color: #ffe0f0;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 1rem;
 }
 
 
