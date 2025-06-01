@@ -19,7 +19,6 @@ function mostrarUnidad(unidad) {
 }
 
 
-document.addEventListener('DOMContentLoaded', () => {
   const nameInput = document.getElementById('name');
   const messageInput = document.getElementById('message');
   const submitBtn = document.getElementById('submitBtn');
