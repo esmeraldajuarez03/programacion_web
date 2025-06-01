@@ -18,16 +18,17 @@ function mostrarUnidad(unidad) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () =>{
+document.addEventListener('DOMContentLoaded', () => {
     const nameInput = document.getElementById('name');
     const messageInput = document.getElementById('message');
     const submitBtn = document.getElementById('submitBtn');
     const commentsList = document.getElementById('commentsList');
 
-  // Cargar comentarios almacenados en localStorage
-    const comentarios = JSON.parse(localStorage.getItem('comentarios')) || [];
-        comentarios.forEach(comentario => {
-        mostrarComentario(comentario);
+  // Obtener comentarios del backend
+fetch('/comentarios')
+    .then(res => res.json())
+    .then(comentarios => {
+    comentarios.forEach(mostrarComentario);
     });
 
 submitBtn.addEventListener('click', () => {
@@ -35,15 +36,23 @@ submitBtn.addEventListener('click', () => {
     const mensaje = messageInput.value.trim();
 
     if (nombre && mensaje) {
-        const nuevoComentario = { nombre, mensaje, fecha: new Date().toLocaleString() };
+    const nuevoComentario = {
+        nombre,
+        mensaje,
+        fecha: new Date().toLocaleString()
+    };
 
-    comentarios.push(nuevoComentario);
-    localStorage.setItem('comentarios', JSON.stringify(comentarios));
-    mostrarComentario(nuevoComentario);
-
-      // Limpiar formulario
-    nameInput.value = '';
-    messageInput.value = '';
+    fetch('/comentarios', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(nuevoComentario)
+    })
+        .then(res => res.json())
+        .then(() => {
+        mostrarComentario(nuevoComentario);
+        nameInput.value = '';
+        messageInput.value = '';
+        });
     } else {
         alert('Por favor completa todos los campos. ✨');
     }
@@ -59,5 +68,5 @@ function mostrarComentario({ nombre, mensaje, fecha }) {
         <hr>
     `;
     commentsList.appendChild(div);
-}});
-
+}
+});
